@@ -4,8 +4,8 @@ from portfolio_pulse.report_generator import ReportGenerator
 class ReportGeneratorConsole(ReportGenerator):
     def generate_report(self) -> str:
         """Generate a console-friendly report."""
-        summary_lines = ["Portfolio Summary:"]
         total_value = self.portfolio_model.total_portfolio_value()
+        summary_lines = [f"=========\nPortfolio Summary (total={total_value:.2f}) :"]
         actual_weights = self.portfolio_model.calculate_actual_weights()
         asset_status = self.portfolio_model.get_asset_status()
 
