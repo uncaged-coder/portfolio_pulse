@@ -9,6 +9,10 @@ class BrokerHandler(ABC):
         self.broker_name = broker_name
 
     @abstractmethod
+    def get_login_data(self, broker_section):
+        pass
+
+    @abstractmethod
     def process_investment(self, investment) -> Asset:
         """Process an investment and return an Asset. Can be overridden by specific brokers."""
         pass

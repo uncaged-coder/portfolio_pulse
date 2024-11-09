@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import configparser
 from typing import List, Dict
 from portfolio_pulse.asset import Asset
 
