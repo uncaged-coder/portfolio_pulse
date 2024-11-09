@@ -12,6 +12,7 @@ class BrokerHandlerWoob(BrokerHandler):
     def get_login_data(self, broker_section):
         login = broker_section.get('login')
         password_entry = broker_section.get('password_entry')
+        self.broker_name = broker_section.name
 
         if not login or not password_entry:
             raise ValueError("Missing login or password entry in broker configuration.")
@@ -52,6 +53,7 @@ class BrokerHandlerWoob(BrokerHandler):
 
         return Asset(
             name=name,
+            broker=self.broker_name,
             isin=isin,
             category=category,
             quantity=quantity,

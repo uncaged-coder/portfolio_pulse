@@ -19,7 +19,7 @@ class ReportGeneratorConsole(ReportGenerator):
 
             for asset, status in asset_status.get(category, []):
                 summary_lines.append(
-                    f"  - {asset.name} ({asset.isin}): {asset.value():.2f} ({status})"
+                    f"  - {asset.name} ({asset.isin}, {asset.broker}): {asset.value():.2f} ({status})"
                 )
 
         return "\n".join(summary_lines)
