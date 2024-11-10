@@ -37,16 +37,17 @@ class AccountManager:
     def fetch_all_assets(self) -> Dict[str, List[Asset]]:
         all_assets = {}
 
-        for broker_name in self.config.sections():
-            config_section = self.config[broker_name]
+        for account_name in self.config.sections():
+            #broker_name = self.config["broker"] if "broker" in self.config else account_name
+            config_section = self.config[account_name]
             source_type = config_section.get("type")
 
             if source_type not in self.data_sources:
-                print(f"Warning: Unsupported source type '{source_type}' in section '{broker_name}'")
+                print(f"Warning: Unsupported source type '{source_type}' in section '{account_name}'")
                 continue
 
             # Create the data source and fetch assets
             data_source = self.create_data_source(source_type, config_section)
-            all_assets[broker_name] = data_source.fetch_assets()
+            all_assets[account_name] = data_source.fetch_assets()
 
         return all_assets
