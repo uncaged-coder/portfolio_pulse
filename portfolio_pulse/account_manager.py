@@ -5,6 +5,7 @@ from portfolio_pulse.asset import Asset
 from portfolio_pulse.data_source import DataSource
 from portfolio_pulse.data_source_csv import DataSourceCSV
 from portfolio_pulse.data_source_woob import DataSourceWoob
+from portfolio_pulse.data_source_ccxt import DataSourceCcxt
 
 
 class AccountManager:
@@ -16,7 +17,8 @@ class AccountManager:
         # Mapping of supported data source types to their respective classes
         self.data_sources = {
             "csv": DataSourceCSV,
-            "woob": DataSourceWoob
+            "woob": DataSourceWoob,
+            "ccxt": DataSourceCcxt
         }
 
     def _load_config(self, config_path: str) -> configparser.ConfigParser:
