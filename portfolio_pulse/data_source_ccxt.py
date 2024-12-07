@@ -34,12 +34,27 @@ class DataSourceCcxt(DataSource):
             return price / eur_usd_rate if eur_usd_rate else price  # Fallback if rate not available
         return price  # Fallback to return price if currency is unexpected
 
+    def _get_equivalent_symbol(self, symbol):
+        # ETH.B would be ETH, ETH2.S would be ETH, etc...
+        symbol = symbol.split(".")[0]
+
+        if symbol == "BETH" or symbol == "ETH2":
+            return "ETH"
+        elif symbol ==  "DOT28":
+            return "DOT"
+        elif symbol == "LDBNB":
+            return "BNB"
+        else:
+            return symbol
+
     def _get_price_in_eur(self, symbol: str) -> float:
         """
         Try to get the price of the symbol in EUR, falling back to USDT and USD
         if necessary. Converts to EUR if the price is found in another currency.
         """
         target_currencies = ["EUR", "USDT", "USD"]
+
+        symbol = self._get_equivalent_symbol(symbol)
 
         for target_currency in target_currencies:
             for pair_format in [f"{symbol}/{target_currency}", f"{target_currency}/{symbol}"]:
