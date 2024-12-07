@@ -6,6 +6,7 @@ from portfolio_pulse.data_source import DataSource
 from portfolio_pulse.data_source_csv import DataSourceCSV
 from portfolio_pulse.data_source_woob import DataSourceWoob
 from portfolio_pulse.data_source_ccxt import DataSourceCcxt
+from portfolio_pulse.data_source_ibkr import DataSourceIBKR
 
 
 class AccountManager:
@@ -18,7 +19,8 @@ class AccountManager:
         self.data_sources = {
             "csv": DataSourceCSV,
             "woob": DataSourceWoob,
-            "ccxt": DataSourceCcxt
+            "ccxt": DataSourceCcxt,
+            "ibkr": DataSourceIBKR
         }
 
     def _load_config(self, config_path: str) -> configparser.ConfigParser:

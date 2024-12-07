@@ -1,7 +1,6 @@
 import subprocess
 from portfolio_pulse.asset import Asset
 from portfolio_pulse.broker_handler_woob import BrokerHandlerWoob
-from portfolio_pulse.broker_handler_energies_stock import is_energy_stock
 
 
 class BrokerHandlerAucoffre(BrokerHandlerWoob):
