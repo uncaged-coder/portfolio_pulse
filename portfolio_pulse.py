@@ -62,5 +62,8 @@ if __name__ == "__main__":
 
     # Generate and print report
     report = ReportGeneratorConsole(portfolio)
-    out = report.generate_report()
+    out = report.generate_report(verbose=True)
+    print(out)
+    print("==============")
+    out = report.generate_report(verbose=False)
     print(out)
