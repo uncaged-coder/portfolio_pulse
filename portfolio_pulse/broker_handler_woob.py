@@ -1,7 +1,6 @@
 from portfolio_pulse.asset import Asset
 from portfolio_pulse.broker_handler import BrokerHandler
-from portfolio_pulse.broker_handler_energies_stock import is_isin_energy_stock
-from portfolio_pulse.broker_handler_gold_stock import is_isin_gold_stock
+from portfolio_pulse.stock_category_manager import StockCategoryManager
 from decimal import Decimal
 import subprocess
 from woob.capabilities.base import NotAvailableType
@@ -29,14 +28,16 @@ class BrokerHandlerWoob(BrokerHandler):
         name = investment.label
         isin = investment.code
 
+        classifier = StockCategoryManager()
+
         if isin == "XX-liquidity":
             category = "Currencies"
             unit_price = 1.0
             quantity = to_float(investment.valuation)
         else:
-            if is_isin_energy_stock(isin):
+            if classifier.is_isin_in_category(isin, "Energies"):
                 category = "Energie Stocks"
-            elif is_isin_gold_stock(isin):
+            elif classifier.is_isin_in_category(isin, "Gold"):
                 category = "Gold"
             else:
                 category = "Stocks"

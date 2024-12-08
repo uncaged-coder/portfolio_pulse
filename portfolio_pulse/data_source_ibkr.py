@@ -9,8 +9,7 @@ import threading
 import time
 from portfolio_pulse.asset import Asset
 from portfolio_pulse.data_source import DataSource
-from portfolio_pulse.broker_handler_energies_stock import is_symbol_energy_stock
-from portfolio_pulse.broker_handler_gold_stock import is_symbol_gold_stock
+from portfolio_pulse.stock_category_manager import StockCategoryManager
 
 
 EXCHANGE_RATE_FILE = "data/ibkr_exchange_rates.json"
@@ -256,10 +255,12 @@ class DataSourceIBKR(DataSource):
         self.client.reqPositions()
         self.client.positions_ready.wait()
 
+        classifier = StockCategoryManager()
+
         for a in self.client.assets:
-            if is_symbol_energy_stock(a.name):
+            if classifier.is_symbol_in_category(a.name, "Energies"):
                 category = "Energie Stocks"
-            elif is_symbol_gold_stock(a.name):
+            elif classifier.is_symbol_in_category(a.name, "Gold"):
                 category = "Gold"
             elif a.category == "Currencies":
                 category = "Currencies"
