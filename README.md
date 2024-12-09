@@ -1,89 +1,42 @@
 # Portfolio Pulse
 
-**Portfolio Pulse** is a Python script to gather and track your investment data, making it easier to monitor your portfolio’s performance. If you maintain a diversified portfolio, such as an *All-Weather Portfolio* or one inspired by *Gave’s Defensive Portfolio*, this tool will help you ensure your asset allocations remain balanced and aligned with your target percentages. 
+**Portfolio Pulse** is a command-line tool that aggregates and analyzes your investment holdings from multiple sources, compares them to your target allocation model, and helps you identify opportunities to rebalance. Whether you follow a standard portfolio like an All-Weather mix or something more specialized like a Gave-inspired defensive strategy, Portfolio Pulse can keep you on track.
 
-By integrating data from multiple sources, **Portfolio Pulse** provides real-time insights on your portfolio composition and highlights when rebalancing is needed.
+## Key Features
 
-## Portfolio Types
+- **Multi-Source Integration:** Pull data from brokers and platforms via Woob, CCXT, CSV, or IBKR APIs.
+- **Customizable Allocations:** Define your target percentages and "good" assets for each category (e.g., Gold, Stocks, Energy Stocks, Currencies, Crypto).
+- **Real-Time Comparison:** Instantly compare actual asset distribution vs. your target model and see which categories need attention.
+- **Categorization via Config Files:** Easily manage categories, ISINs, and symbols in separate config files for flexibility without code changes.
 
-### Example: All-Weather Portfolio
-This popular portfolio type typically includes:
-- **50% Stocks** (e.g., SP500, CAC40, MSCI, etc.)
-- **25% Gold**
-- **25% Bonds** (e.g., US, German, or Chinese bonds)
+## Setup
 
-### Example: Gave’s Defensive Portfolio
-The Gave Portfolio is designed to be resilient and defensive, with allocations like:
-- **25% Energy Stocks**
-- **25% Gold**
-- **25% Yen** (or similar currency assets)
-- **25% Asian Stocks** (excluding Japan, includes India)
+1. **Configuration Files:**
+   All configurations live under `~/.config/portfolio_pulse/`:
+   - **User Config:** `~/.config/portfolio_pulse/<user>.ini` defines accounts, credentials, and data sources.
+   - **Model Allocation:** `~/.config/portfolio_pulse/model_<modelname>.ini` sets target percentages and "good" assets.
+   - **Stock Category:** `~/.config/portfolio_pulse/stock_category.ini` maps ISINs and symbols to categories (e.g., Gold, Energy).
 
-### My Customized Portfolio
-Inspired by Gave’s portfolio, my allocation also includes cryptocurrencies, with periodic adjustments to account for BTC and other crypto assets.
+2. **Install Dependencies:**
+   - Python 3 and required packages.
+   - Additional setups may be required for Woob or CCXT usage.
 
-## Rebalancing Strategy
+## Example Configurations
 
-Every three months (or a similar interval), I review my asset distribution to ensure it aligns with my target allocations. Earnings from freelance work are invested in underweighted assets, and if disparities are significant, I rebalance by selling overweight assets and buying underweight ones.
-
-## Features
-
-Using **Portfolio Pulse**, you can:
-1. **Quickly see asset allocations** relative to your target percentages.
-2. **Pull data** from various sources:
-   - **[Woob](https://woob.tech/)** (Web Outside of Browser) for banking and gold data.
-   - **[CCXT](https://github.com/ccxt/ccxt)** for real-time cryptocurrency data from online brokers.
-   - Local CSV files for crypto assets and other holdings not accessible via Woob or CCXT.
-
-## Configuration
-
-Configuration files are stored in `~/.config/portfolio_pulse/`. Each account or portfolio provider has its own `.ini` file specifying login credentials, data sources, and target portfolio models.
-
-### Account Configuration Example
-
+**Model Allocation (`model_gave2_default.ini`):**
 ```ini
-# ~/.config/portfolio_pulse/account1.ini
-
-[boursorama]
-type = woob
-login = 11223344
-password_entry = finance/boursorama.com/11223344
-
-[degiro]
-type = woob
-login = xxx
-password_entry = finance/degiro.nl/xxx
-
-[binance]
-broker = binance
-type = ccxt
-api_key = xxxxxx
-secret = xxxxxxxxxx
-```
-
-_Note_:
-
-- Credentials are securely managed via pass (password manager), where password_entry refers to the pass path for login credentials.
-- OTP (one-time password) is also supported via pass, using the same entry as the password.
-
-### Model Portfolio Configuration Example
-
-Define your target portfolio in an .ini file like the one below (following the Gave Portfolio model):
-
-
-```ini
-# ~/.config/portfolio_pulse/gave2_default.ini
-
 [Gold]
 target_percentage = 25
+good_assets = US1234567890
 
 [Currencies]
 target_percentage = 25
 
 [Stocks]
 target_percentage = 25
+good_assets = US0378331005, FR0000131906
 
-[Energy Stocks]
+[Energie Stocks]
 target_percentage = 25
 
 [Bonds]
@@ -91,20 +44,66 @@ target_percentage = 0
 
 [Crypto]
 target_percentage = 0
+good_assets = BTC
 ```
 
-## Running Portfolio Pulse
+**User Accounts (user.ini):**
 
-To execute the script and get a snapshot of your portfolio’s allocation:
+```ini
+[boursorama]
+type = woob
+login = 11223344
+password_entry = user/perso/finance/boursorama.com/11223344
+
+[bullionstar]
+type = woob
+login = xx@gmail.com
+password_entry = user/perso/finance/bullionstar.com/xx@gmail.com
+
+[degiro]
+type = woob
+login = xx
+password_entry = user/perso/finance/degiro.nl/xx
+
+[csv]
+type = csv
+file = /data/portfolio_pulse/private/user.csv
+
+[binance]
+broker = binance
+type = ccxt
+api_key = aaaaaaaaaaaaaaaaaaaaaaaa
+secret = aaaaaaaaaaaa
+```
+
+**Stock Categories (stock_category.ini):**
+
+```ini
+
+[Gold]
+ISINS = DE000A0S9GB0,CH0047533523,CH0183136057
+SYMBOLS = ZSILEU,ZGLDEU
+
+[Energies]
+ISINS = FR0000120271,GA0000121459,FR0000051070,JE00B55Q3P39,GB0007188757,US3682872078,US69343P1057,US88642R1095,LT0000128621,US71654V4086,IE00BM67HM91
+SYMBOLS = EC,GAZ,LKOD,LUK.EUR,SEPL,RIO,PKN,MAU,XDW0
+
+```
+
+## Usage
+
+Run the tool by specifying the user and model:
 
 ```bash
-python3 portfolio_pulse.py --user account1 --model gave2
-
+python3 portfolio_pulse.py --user user --model gave2_default
 ```
 
-Here:
-- --user specifies the account configuration (e.g., account1.ini).
-- --model specifies the target portfolio configuration (e.g., gave2_default.ini).
+This will:
 
-This tool provides a simple, efficient, and secure way to keep your investments aligned with your strategy.
-Happy investing!
+- Fetch all assets from sources defined in user.ini.
+- Load and compare against the allocations in model_gave2_default.ini.
+- Print a detailed and a concise report showing actual vs. target allocations and highlight good assets.
+
+## Rebalancing Strategy
+
+Use the reports to see if you need to add or remove assets to meet your target allocations. Over time, as markets shift, Portfolio Pulse helps you maintain your desired balance, ensuring your portfolio remains aligned with your strategy.
